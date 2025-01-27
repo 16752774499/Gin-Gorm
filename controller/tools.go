@@ -1,39 +1,39 @@
 package controller
 
 import (
-	"fmt"
-	"gin-orm/models"
+	"reflect"
+	"strconv"
+	"time"
 )
 
-func Add(moudel interface{}) bool {
-	result := models.DB.Create(moudel)
-	if result.RowsAffected != 0 {
-		fmt.Println(moudel, "Add sussecs!")
-		return true
-	} else {
-		fmt.Println(models.DB.Error)
-		return false
-	}
+func StringToUint(s string) uint64 {
+	val, _ := strconv.ParseUint(s, 10, 64)
+	return val
 }
 
-func Delete(moudel interface{}) bool {
-	result := models.DB.Delete(moudel)
-	if result.RowsAffected != 0 {
-		fmt.Println(moudel, "Delete sussecs!")
-		return true
-	} else {
-		fmt.Println(models.DB.Error)
-		return false
-	}
-}
+func AssignNonNullFields(dest, src interface{}) {
+	destValue := reflect.ValueOf(dest).Elem()
+	srcValue := reflect.ValueOf(src).Elem()
 
-func Updata(moudel interface{}) bool {
-	result := models.DB.Updates(moudel)
-	if result.RowsAffected != 0 {
-		fmt.Println(moudel, "Updata sussecs!")
-		return true
-	} else {
-		fmt.Println(models.DB.Error)
-		return false
+	for i := 0; i < destValue.NumField(); i++ {
+		destField := destValue.Field(i)
+		srcField := srcValue.Field(i)
+
+		switch srcField.Kind() {
+		case reflect.String:
+			if srcField.Len() > 0 {
+				destField.SetString(srcField.String())
+			}
+		case reflect.Uint8:
+			if srcField.Uint() > 0 {
+				destField.SetUint(srcField.Uint())
+			}
+		case reflect.Bool:
+			destField.SetBool(srcField.Bool())
+		case reflect.Struct:
+			if !srcField.Interface().(time.Time).IsZero() {
+				destField.Set(reflect.ValueOf(srcField.Interface()))
+			}
+		}
 	}
 }

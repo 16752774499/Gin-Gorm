@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	"gorm.io/gorm"
@@ -14,13 +15,20 @@ type User struct {
 	Email     string         `gorm:"unique"`   // 字符串类型，且设置为唯一
 	Password  string         `gorm:"not null"` // 字符串类型，不为空
 	IsActive  bool           // 布尔类型
-	BirthDate time.Time      `gorm:"type:date"` // 数据库日期类型
-	CreatedAt gorm.DeletedAt `gorm:"index"`     // 带索引的软删除时间字段，记录创建时间（软删除时会有时间戳）
-	UpdatedAt gorm.DeletedAt `gorm:"index"`     // 带索引的软删除时间字段，记录更新时间（软删除时会有时间戳）
+	BirthDate time.Time      `gorm:"type:date"` // 数据库日期类型 生日
+	CreatedAt time.Time      `gorm:"index"`     // 带索引的软删除时间字段，记录创建时间（软删除时会有时间戳）
+	UpdatedAt time.Time      `gorm:"index"`     // 带索引的软删除时间字段，记录更新时间（软删除时会有时间戳）
 	DeletedAt gorm.DeletedAt `gorm:"index"`     // 带索引的软删除时间字段，用于软删除标记
 }
 
 // 可以使用结构体中自定义方法改变表的名称
 func (User) TableName() string {
 	return "USER"
+}
+
+// 自定义全局作用域
+func NotNullScope(field string) func(tx *gorm.DB) *gorm.DB {
+	return func(tx *gorm.DB) *gorm.DB {
+		return tx.Where(fmt.Sprintf("%s  NOT NULL", field))
+	}
 }

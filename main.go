@@ -11,6 +11,10 @@ func main() {
 
 	routes.RestfulUser(r)
 
-	r.Run(":9999")
+	//r.Run(":9999")
+	err := r.Run(":9999")
+	if err != nil {
+		panic(err)
+	}
 
 }
