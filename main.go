@@ -1,20 +1,14 @@
 package main
 
-import (
-	"gin-orm/routes"
+// func main() {
+// 	r := gin.Default()
 
-	"github.com/gin-gonic/gin"
-)
+// 	routes.RestfulUser(r)
 
-func main() {
-	r := gin.Default()
+// 	//r.Run(":9999")
+// 	err := r.Run(":9999")
+// 	if err != nil {
+// 		panic(err)
+// 	}
 
-	routes.RestfulUser(r)
-
-	//r.Run(":9999")
-	err := r.Run(":9999")
-	if err != nil {
-		panic(err)
-	}
-
-}
+// }
