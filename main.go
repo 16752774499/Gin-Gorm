@@ -9,13 +9,14 @@ import (
 func main() {
 	r := gin.Default()
 	r.GET("/", func(c *gin.Context) {
-		var articleList []models.Article
-		//Preload("ArticleCate")里面的ArticleCate为Articlestruct中定义的属性ArticleCate
-		models.DB.Preload("ArticleCate").Limit(10).Find(&articleList)
+
+		articleCateList := []models.ArticleCate{}
+		models.DB.Preload("Article").Find(&articleCateList)
 		c.JSON(200, gin.H{
-			"result": articleList,
+			"result": articleCateList,
 		})
 	})
+
 	routes.RestfulUser(r)
 
 	err := r.Run(":9999")
