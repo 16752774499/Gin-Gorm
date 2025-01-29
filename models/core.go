@@ -31,7 +31,7 @@ func init() {
 	}
 	fmt.Println("初始化！")
 	//自动迁移表结构
-	err = DB.AutoMigrate(&User{}, &ArticleCate{}, &Article{})
+	err = DB.AutoMigrate(&User{}, &ArticleCate{}, &Article{}, &LessonStudent{}, &Lesson{}, &Student{})
 	if err != nil {
 		fmt.Printf("Failed to auto migrate: %v\n", err)
 	}
